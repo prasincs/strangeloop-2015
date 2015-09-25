@@ -1,0 +1,206 @@
+#+STARTUP: indent
+#+TODO: REMINDER TODO NOTE DONE
+
+* Talks
+** I see what you mean
+- Ideas around Dedalus language semantics were interesting
+- Bloom language with better syntax, same semantics
+- Expressing eventually consistency and programming in time domain
+- Using the database as the common source for describing the values as
+  truths over time
+- Concept of Ultimate value that can be eventually be set.
+** Unconventional Programming with Chemical Computing
+- Cross fertilization from two different fields - Computer Programming
+  and Nature/Biology
+- Using chemical reactions as analogies to programming abstractions
+-
+*** Prime Reaction
+- Using reaction rules and vectors as inputs to generate the primes
+
+*** Gamma Chemical Reaction
+- Execution stops when it reaches steady state.. (Hm?)
+
+*** Dining Philosophers Problem
+- Reaction of fork molecules & Thinking Philosopher = Eating
+  Philosopher
+- Reaction of think molecule & Eating Philosopher = Thinking
+  Philosopher
+
+*** Terms
+
+- Hatching -> higher order (fn a,b) -> fn, result
+  Returns fn so that it can go and keep reacting
+*** Books
+- Unconventional Programming Paradigms
+*** Thoughts
+- Basically the time domain and asynchronous nature is modeled by
+  chemicals reacting.
+- Feels very much like Reactive Programming
+- Could be useful for building self-organizing/Self-healing system
+
+** Faster Objects and Arrays
+- Closing the gap between C & Java Speedup(?)
+- http://www.objectlayout.org
+- Will attempt to put into next version of Java. Maybe not in 9 but
+  later
+- Focus: Speed for POJOs on Heap
+- Not trying to improve footprint, purely about speed
+- Not off-heap solutions
+- Not looking for Immutability
+- Targets Java 7
+- Modeled after java.util.concurrent (came from outside of Sun - Used
+  to be EDU.oswego.cs.dl.util.concurrent)
+- Streaming comes directly from layout but Dead Reckoning requires
+  compiler support
+*** StructuredArray<T>
+- Collection is immutable. Cannot replace elements
+- Instantiate via factory method. Required to make of same class.
+- All elements constructed at instantiation time
+**** Liveness
+- "Inner pointer keeps container alive" semantics is what everyone is
+  doing. That's the only thing they have guarantee of liveness
+- Real objects have real liveness
+- Collection members don't keep it implicitly alive, other way around
+  instead
+**** TODO Features
+- Can be locked, shared, just POJOs
+- Indexes are longs
+- Nested arrays are supported, multi-dimensional and composable
+- Subclassable
+- NOT constructable. Must be created with factory methods
+- Contradiction -> Subclassable but not constructable? Have to expose
+  the constructor otherwise to be subclassable
+*** Comparisons between approaches
+- Value Types are good for on threads. Limitations when you put on
+  heap.
+- Packed Objects allows precise control. Off-heap & sharing
+  data. On-heap implementation is also available
+- ObjectLayout - On heap and usable for POJOs
+*** Origin
+- Need for structs in Java vs "we already have Objects"
+- [Hm?] What we need is competitively speedy access for java
+  collection semantics that are faster in C
+- Too many options in certain datatypes that limit speed
+*** C's Benefits
+**** Dead Reckoning
+- Being able to quickly access memory without referencing
+**** Streaming
+- Predictable striding access in memory
+*** Speed Enabling Limitations
+- Object[] vs struct foo[]
+- Java: _mutable_ array of _same-base-type_ objects
+- C: _immutable_ array of _exact-base-type_ structus
+- Mutability & _non-uniform member-size_ force de-reference & break
+  streaming
+
+** When "Worst" is Best (in Distributed Systems)
+- Designing for absolute worst case penalizes the average case
+- Handling worst case network behavior, we can improve the average
+  case
+- Packets may be delayed for arbitrarily long time - especially in
+  cloud deployments, also can always be dropped. Can model both
+  behaviors using "Asynchronous Network"
+- Many guarantees do not require coordination
+- New Designs: avoid coordination unless absolutely necessary
+- Systems that behave well during network faults can behave better in
+  non-faulty environments too
+- Reasoning about worst-case scenarios can be a powerful design tool
+*** Availability
+- coordination free systems -- don't have to talk between servers
+  whether or not the network is available
+- Enable infinite scale-out
+- Improves throughput -- each can run at the same time and utilize the
+  inherent parallelism
+*** CAP theorem
+- Tradeoffs between availability and getting absolute right answer
+- Paper: Harvest and Yield
+- Need to communicate if we want to share state
+*** Read Committed
+- Never read from uncommitted transactions
+- Network is the bottleneck now, vs legacy implementations where disk
+  was the bottleneck
+- Example: Buffer writes until committed.. incomplete implementation
+  not seen until done
+*** Replication
+- For fault tolerance also helps with capacity
+*** Failover helps devops too
+- "Fail" the database node to do routine maintenance
+*** Tail Latency in Microservices
+- Targetting tail latency may not improve the average case by much.
+*** Universal Design
+- Curb cuts - originally designed for people in wheelchairs but useful
+  for everyone.
+- W3C Accessibility document
+
+** All In" With Determinism for Performance and Testing in Distributed Systems
+- VoltDB - reads are aimed to be deterministic
+- COW snapshot. Hash to check if replicas are consistent or not
+- Allows non-deterministic reads but not writes
+- Running mixed versions when you're relying on determinism is scary
+*** ACID
+- Atomic --> All or nothing. No prtial failure
+- Consistent --> Schema constraints
+**** Isolation Levels
+- Volt-DB only supports Seralizability
+**** Testing ACID
+- State Machine Fuzzing {REMINDER: watch again}
+- Self-checking workload
+- TransactionID Self Check.
+- https://github.com/VoltDB/voltdb/tree/master/tests/test_apps/txnid-selfcheck
+***** Isolation
+- Run transactions concurrently
+***** Durable
+***** Consistency
+- Skipped
+** Building Scalable Stateful Services
+*** NOTE I missed about 10 minutes of talk
+*** Papers
+**** Fast Restarts at Facebook [ Still need to read ]
+*** Dynamic Cluster Memebership
+- Gossip Protocol vs Consensus Systems
+- Availabilty vs Consistency
+- Consensus restriction is the last thing you want to have availability
+*** Scuba
+- In memory database from Facebook
+- Composes Results from multiple servers
+- Returns the requester how much uncertainty is there
+*** Uber Ringpop
+- Node.js library that brings application-layer sharding to many of
+  their services.
+- Swim Gossip Protocol + Consistent Hashing
+- Focused on availability
+*** Orleans
+- From Microsoft Research
+- Runtime and Programming Model
+- Uses Actor Model
+- Gossip Protocol for cluster membership
+- Workload => Consistent Hashing & DHTs
+- Pooling state into services
+
+*** Issues to be Aware of in Stateful services
+**** Unbounded Data Structures
+- Stateful services need explicit bounds on structures
+- Otherwise end up with long Garbage Collection cycles
+- "Clients are not your frinds, they're not going to do what you want
+  them to do" -- regarding size/length of sessions
+**** Memory Management
+**** Reloading State
+- First connection
+- Recovering from crashes
+- New Code
+- Percentiles?
+- In Halo, the first connection would timeout but the service would be
+  polling for data and the future connections would succeed.
+* Talks to Catchup on
+** Immutable Data Science with Datomic, Spark and Kafka
+** How to Have your Causality and Wall Clocks, Too
+** Typed Clojure: From Optional to Gradual Typing
+** Managing Containers at Scale with CoreOS and Kubernetes
+** Building Scalable Stateful Services
+** GC Tuning Confessions Of A Performance Engineer
+** Unikernels talk
+*** REMINDER - Remind Icy
+** Ideology
+Gary Bernhardt
+*** REMINDER - Tell Prajjwol about it
+** Amy Wibowo's talk in Centene
