@@ -191,12 +191,46 @@
 - Percentiles?
 - In Halo, the first connection would timeout but the service would be
   polling for data and the future connections would succeed.
+** Apache Kafka and the Next 700 Stream Processing Systems
+- 3 ways of thinking about Software based on how they do Inputs &
+  Outputs
+- 2: Request/Response and Batch cover most of them
+- Stream Processing is becoming more popular
+- Being able to represent inside a company as a stream
+- Retail as one of the natural examples
+- Reason you haven't seen Stream Processing at scale is lack of
+  infrastructure for it
+- Lot of work has been done for Request/Response and Batch but not in
+  the middle
+- Message Systems, Complex Event Processing, ESB, Database Triggers
+  are ways to handle this space leaving a vacuum for Stream Processing
+- Stream Processing = Logs + App Code
+- State is maintained in the app code. Maintaining the state even when
+  the program dies is the hard problem
+*** Hard Problems
+- Partitioning & Scalability
+- Unifying Streams and Tables -- putting them together gracefully
+- Time
+- Re-processing
+- Semantics & Fault Tolerance
+- Maintaining Change Logs
+*** Kafka
+- Maintains logs at large scale efficiently
+- Log Compaction --> way of maintaining persistent state over time
+- App journals change logs to Kafka as a backup
+- Notion of time in Kafka -- Offset
+- But the log may have gotten compacted by the time the service needs
+  to re-process.
+- Taking about 1.1 Trillion messages per day
+* Rewatch
+** Building Scalable Stateful Services
 * Talks to Catchup on
+- Ordered by priority -- more or less
+** Apache Kafka and the Next 700 Stream Processing Systems
 ** Immutable Data Science with Datomic, Spark and Kafka
 ** How to Have your Causality and Wall Clocks, Too
 ** Typed Clojure: From Optional to Gradual Typing
 ** Managing Containers at Scale with CoreOS and Kubernetes
-** Building Scalable Stateful Services
 ** GC Tuning Confessions Of A Performance Engineer
 ** Unikernels talk
 *** REMINDER - Remind Icy
