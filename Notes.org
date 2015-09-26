@@ -451,7 +451,6 @@ https://www.youtube.com/playlist?list=PLcGKfGEEONaCIl5eU53uPBnRJ9rbIH32R
 ** How to Have your Causality and Wall Clocks, Too
 ** Managing Containers at Scale with CoreOS and Kubernetes
 ** GC Tuning Confessions Of A Performance Engineer
-** Gil Tene's Latency talk
 ** Cognitive Biases
 ** Typed Clojure: From Optional to Gradual Typing
 ** Immutable Data Science with Datomic, Spark and Kafka
