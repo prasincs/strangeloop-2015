@@ -132,7 +132,7 @@
   for everyone.
 - W3C Accessibility document
 
-** All In" With Determinism for Performance and Testing in Distributed Systems
+** "All In" With Determinism for Performance and Testing in Distributed Systems
 - VoltDB - reads are aimed to be deterministic
 - COW snapshot. Hash to check if replicas are consistent or not
 - Allows non-deterministic reads but not writes
@@ -221,12 +221,46 @@
 - Notion of time in Kafka -- Offset
 - But the log may have gotten compacted by the time the service needs
   to re-process.
-- Taking about 1.1 Trillion messages per day
-* Rewatch
+- Taking about 1.1 Trillion messages per day at LinkedIn
+** From Protesting to Programming: Becoming a Tech Activist
+- Story of Ferguson
+- She had to change her name from Idalin to Abby
+- Was humiliated and embarassed to say her name
+- Had to use Abby to get even a phone interview
+- From the poorest zipcode in Philly, 75% dropout rate in high school
+- Considered dropping out from college, struggled
+- Used Ask Jeeves to ask questions about everything
+- Graduating 3.75 from college in applied statistics
+** Hopelessness and Confidence in Distributed Systems Design #strangeloop
+http://trevmex.com/post/129916074918/hopelessness-and-confidence-in-distributed-systems
+** Spectre : Nested Clojure data structures
+- Using mapv because original seq is a vector and map converts to list
+- Navigating to datastructure is very hard if it's nested
+- (srange) subsequence within sequence
+- StructurePath Protocol is the core component of spectre
+   + transform
+   + select
+- (if-path) is like (if) but operates on nested structures
+- really fast.. almost as good as handwritten code
+- Using (compiled-path) can be faster than update-in
+- Can do pre-compilation in any scenario now
+* Unsessions
+** Java 8 streams and lambdas
+- Not same as Anonymous Classes - according to Brian Goetz
+  Need to find the mailing list discussion about it.
+- '->' separates the left hand side of the equation from the right
+*** Streams
+- Parallel Streams
+  + You need to know how ForkJoinPool works
+  + Don't want to use it inside a container
+  + Benchmark your use cases
+- There's a peek operation for streams
+
+* Watch again
 ** Building Scalable Stateful Services
+** Apache Kafka and the Next 700 Stream Processing Systems
 * Talks to Catchup on
 - Ordered by priority -- more or less
-** Apache Kafka and the Next 700 Stream Processing Systems
 ** Immutable Data Science with Datomic, Spark and Kafka
 ** How to Have your Causality and Wall Clocks, Too
 ** Typed Clojure: From Optional to Gradual Typing
