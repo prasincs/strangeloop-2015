@@ -233,17 +233,96 @@
 - Graduating 3.75 from college in applied statistics
 ** Hopelessness and Confidence in Distributed Systems Design #strangeloop
 http://trevmex.com/post/129916074918/hopelessness-and-confidence-in-distributed-systems
-** Spectre : Nested Clojure data structures
+** Specter : Nested Clojure data structures
+
 - Using mapv because original seq is a vector and map converts to list
 - Navigating to datastructure is very hard if it's nested
 - (srange) subsequence within sequence
-- StructurePath Protocol is the core component of spectre
+- StructurePath Protocol is the core component of specter
    + transform
    + select
 - (if-path) is like (if) but operates on nested structures
 - really fast.. almost as good as handwritten code
 - Using (compiled-path) can be faster than update-in
 - Can do pre-compilation in any scenario now
+** CRDTs Illustrated
+- Exactly once Delivery is generally impossible when partitions happen
+** Transactions: myths, surprises and opportunities
+- Need something in the middle between serializability and eventual
+  consistency to express causality
+- Consistent Snapshot means its consistent with causality
+- Can be implemented without global coordination
+*** Read Committed
+- Avoids dirty reads and writes
+- Read skew can happen
+- Default isolation level for Oracle, Postgres and SQL Server
+- Repeatable Read & Snapshot Isolation were introduced to avoid read skew
+- Databases call Repeatable Read when they mean Snapshot Isolation
+*** Snapshot Isolation
+- Transaction sees database at one point in time
+- Multi-Version -> Database keeps several versions of a data item
+- Not Serializable
+*** Write Skew
+- By the time the write is committed, the premise of the decision may not be true
+- Serializability violatied
+*** 2-Phase Locking
+- When you read something, acquire and hold the lock until the end of
+  transaction.
+- Performance Problems: If you're reading the entire database, you're
+  locking entire database
+*** Transaction Boundary
+- Ensuring transactions don't happen across services
+- If you want serializable transactions across services, you need a
+  atomic commits across services
+- Turns into an atomic broadcast problem. It's equivalent to consensus
+- Consensus is pretty expensive to do. 2-PC makes it brittle.
+
+** PTero
+- Workflow for doing genome sequencing using distributed systems
+- How to build pipelines to do genetic sequencing at scale and allow
+  researchers to change the steps in the pipeline.
+- Fragile Building block towers.
+- Made uniform interfaces and automated pipelines as the sequencing
+  costs came
+- Deployed on Deis & VMs. Celery for messaging between components,
+  RabbitMQ for messaging broker
+- Language: Python mostly
+*** Legacy Workflow
+- Declarative XML based workflow description
+- Parallel-by concept
+  + Sort of like map reduce but without the reduce. "Run this process
+    but for every chromosome, or genome, etc"
+- Centralized workflow tracking
+- Highly coupled to perl, etc
+- Represented workflows as DAG
+  + DAGs encode dependencies between processes
+  + Cannot do choice at runtime
+  + Can do choices at runtime using a FSM
+  + If you use someone elses workflow engine, you have to convert your
+    FSMs to DAGs
+  + Petri-Net -- can do more than FSMs and DAG
+*** Petri Net
+- Places and Transitions
+- Places represent state
+- bipartite graph representation
+- transitions fire iff all input places have a token
+- They use it to do both choice and concurrency
+- Using the transition to have side-effects
+*** Flow
+- Scales up nicely w/ concurrent wokflows and # of tasks in workflow
+- was tied to the old XML format from legacy workflow and made it
+  cumbersome
+*** Design Goals
+- ability to scale, use RESTful API
+- pluggable job execution services
+- Task has at least one method, can have more. No method executes if
+  the first one succeeds
+   + you can do things like run the shortcut one that depends on the
+     index, if that fails, generate the required indexes
+*** Development
+- Development Methodology: SEMAT, System Design: 12 Factor
+- waffle.io looks interesting
+
 * Unsessions
 ** Java 8 streams and lambdas
 - Not same as Anonymous Classes - according to Brian Goetz
@@ -256,13 +335,32 @@ http://trevmex.com/post/129916074918/hopelessness-and-confidence-in-distributed-
   + Benchmark your use cases
 - There's a peek operation for streams
 
+** Emacs
+Featured modes/tips from (uncredited) the unsession:
+
+emacs-friends: https://github.com/ustun/emacs-friends
+ido -- ido-ubiquitous ? many other ido packages
+helm ac-helm
+winner-mode
+yasnippet
+emacs as a script engine, https://gist.github.com/kat-co/9a51ed7f5ac8cc874b26
+elnode http://emacswiki.org/emacs/Elnode
+ensime - Enhanced Scala mode; see also scala-mode2
+org-mode
+Emacs Rocks - RESTful client demo http://emacsrocks.com/e15.html
+
+
 * Watch again
 ** Building Scalable Stateful Services
 ** Apache Kafka and the Next 700 Stream Processing Systems
+** Specter
 * Talks to Catchup on
 - Ordered by priority -- more or less
+Playlist is at
+https://www.youtube.com/playlist?list=PLcGKfGEEONaCIl5eU53uPBnRJ9rbIH32R
 ** Immutable Data Science with Datomic, Spark and Kafka
 ** How to Have your Causality and Wall Clocks, Too
+** CRDT talks
 ** Typed Clojure: From Optional to Gradual Typing
 ** Managing Containers at Scale with CoreOS and Kubernetes
 ** GC Tuning Confessions Of A Performance Engineer
