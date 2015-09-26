@@ -357,7 +357,7 @@ http://trevmex.com/post/129916074918/hopelessness-and-confidence-in-distributed-
 - interrupts -- set affinity in =/proc/irq=
 - Timer ticks -- kernel can turn off ticks for certain time for a CPU
   if there's only one process running in a cpu.
-** How Not to measure  latency
+** How Not to measure  Latency
 - Look at the Entire spectrum, not specific percentiles
 - What we care about is how latency behaves
 - if you're not plotting the max
@@ -369,14 +369,49 @@ http://trevmex.com/post/129916074918/hopelessness-and-confidence-in-distributed-
 - Coordinated omission problem
   + load testers backing off when doing calls and takes too long
   + cant send second request
+  + if you see a vertical jump, it could be a 99%'ile problem
+  + Gattling and current version of ycsb the only tool that has fixed
+    the coordinated omission problem that Gil has seen
 - Dont waste time with numbers from uncalibrated systems
 - Response time vs service time
   + At very low load, they're similar but at higher load they're very
     different
+  + look at both of them for the real latency information
 - Sustainable Throughput: throughput while maintaining service levels
   + how fast you can go without crashing
   + use the saturation level request to know the end/limits
-
+** Security for Humans: Privacy and Coercion resistant design
+- Speaker worked at Google, did incident response when China hacked them
+- Technology is power amplifier, even for ones with power already
+- Finfisher software was found after Egypt, but hadn't been seen my
+  security community. You can get it for 300K Euros.
+- backdoors, and implants on activists' machines
+- Android Spycall - over hardware and instantiates call to somewhere
+  without letting them know
+- Blue Coat - tracking software was found in Iran, Sudan, Syria
+- "For their eyes only"
+- Hacking Team - targetted the speaker directly
+- Project Chess - project at NSA to make Skype hackable
+- ISS World - wiretapper's ball. Can go to buy exploits.
+*** Threat modeling
+**** Eve
+- Assume Eve/Govt is omnipresent
+- Can defeat Eve by using basic encryption
+- Setup cost is expensive but operational cost is $0
+**** Mallory
+- Injecting into traffic stream
+- Including in Youtube streams -- because stream was plaintext
+- Cost: about $1 M to put together the network injection system in
+  ISPs
+**** Jack Bauer
+- Torturing people to get data
+- Really expensive/priceless. Costs political capital if found
+*** Coercion resistant design
+- sensitive data storage, transportation and handling
+- As your website increases you will eventually forced to implement
+  coercion resistant security
+- You have data that's interesting to people to exploit
+- Lot like designing for failure
 * Unsessions
 ** Java 8 streams and lambdas
 - Not same as Anonymous Classes - according to Brian Goetz
@@ -422,8 +457,4 @@ https://www.youtube.com/playlist?list=PLcGKfGEEONaCIl5eU53uPBnRJ9rbIH32R
 ** Immutable Data Science with Datomic, Spark and Kafka
 ** CRDT talks
 ** Unikernels talk
-*** REMINDER - Remind Icy
 ** Ideology
-Gary Bernhardt
-*** REMINDER - Tell Prajjwol about it
-** Amy Wibowo's talk in Centene
