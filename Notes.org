@@ -357,6 +357,25 @@ http://trevmex.com/post/129916074918/hopelessness-and-confidence-in-distributed-
 - interrupts -- set affinity in =/proc/irq=
 - Timer ticks -- kernel can turn off ticks for certain time for a CPU
   if there's only one process running in a cpu.
+** How Not to measure  latency
+- Look at the Entire spectrum, not specific percentiles
+- What we care about is how latency behaves
+- if you're not plotting the max
+  + Max is the signal.. not noise
+- don't average percentiles
+- 99% is a better metric to get than 95%, covers better
+- can't get 99.999% from small sample rates
+- HdrHistogram to get all the percentiles
+- Coordinated omission problem
+  + load testers backing off when doing calls and takes too long
+  + cant send second request
+- Dont waste time with numbers from uncalibrated systems
+- Response time vs service time
+  + At very low load, they're similar but at higher load they're very
+    different
+- Sustainable Throughput: throughput while maintaining service levels
+  + how fast you can go without crashing
+  + use the saturation level request to know the end/limits
 
 * Unsessions
 ** Java 8 streams and lambdas
@@ -389,6 +408,7 @@ Emacs Rocks - RESTful client demo http://emacsrocks.com/e15.html
 ** Apache Kafka and the Next 700 Stream Processing Systems
 ** Specter
 ** When OS gets in the way
+** How Not to measure latency
 * Talks to Catchup on
 - Ordered by priority -- more or less
 Playlist is at
